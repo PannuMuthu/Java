@@ -1,0 +1,196 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Scanner;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+public class HashTableTest extends Application{
+	static File file;
+	static int simpleListCount;
+	static int hashTableCount;
+	@Override
+	public void start(Stage primaryStage) {
+		FileChooser fileChooser = new FileChooser();
+		configureFileChooser(fileChooser);
+        file = fileChooser.showOpenDialog(primaryStage);
+        primaryStage.close();
+		Platform.exit();
+	}
+	
+	
+	public static void main(String[] args) {
+		Application.launch();
+		Instant start = Instant.now();
+		HashTable list = generateHashTable();
+		Instant end = Instant.now();
+		System.out.println("HASH TABLE:");
+		System.out.println("Total size of HashTable (# of words): " + hashTableCount);
+		System.out.println("HashTable Time: " + ((double) Duration.between(start, end).toMillis() / 1000.0) + " seconds \n");
+		Scanner input = new Scanner(System.in);
+		System.out.println("Please enter the entire desired filepath of the HashTable output file: ");
+		String filePath = input.nextLine();
+		File outFile = new File(filePath);
+		System.out.println("Alphabetically Sorting...");
+		try {
+			
+			String unsorted = list.toString();
+			String[] array = unsorted.split("\n");
+			ArrayList<String> outArray = new ArrayList<>(Arrays.asList(array));
+			Collections.sort(outArray);
+			for (int top = 1 ; top < array.length ; top++) {
+		           String item = array[top];
+		           int i = top;
+		           while (i > 0 && item.compareTo(array[i - 1]) < 0){
+		                array[i] = array[i - 1];
+		                i--;
+		            }
+		            array[i] = item;
+		    }
+		    BufferedWriter bw = new BufferedWriter(new FileWriter(outFile));
+		    for(int i =0; i < array.length; i++) {
+		    	bw.write(array[i]);
+		    	bw.write('\n');
+		    }
+		    bw.close();
+		    System.out.println("Successfully written sorted HashTable output to file! \n");
+		    
+			System.out.println("SIMPLE LIST:");
+		    Instant start2 = Instant.now();
+			SimpleList list2 = generateSimpleList();
+			Instant end2 = Instant.now();
+			System.out.println("Total size of SimpleList (# of words): " + simpleListCount);
+			System.out.println("SimpleList Time: " + ((double) Duration.between(start2, end2).toMillis() / 1000.0) + " seconds \n");
+			System.out.println("Please enter the entire desired filepath of the SimpleList output file: ");
+			String filePath2 = input.nextLine();
+			File outFile2 = new File(filePath2);
+			System.out.println("Alphabetically Sorting...");
+			
+				
+				String unsorted2 = list2.toString();
+				String[] sArray = unsorted2.split("\n");
+				for (int top = 1 ; top < sArray.length ; top++) {
+			           String item = sArray[top];
+			           int i = top;
+			           while (i > 0 && item.compareTo(sArray[i - 1]) < 0){
+			                sArray[i] = sArray[i - 1];
+			                i--;
+			            }
+			            sArray[i] = item;
+			    }
+			    BufferedWriter bw2 = new BufferedWriter(new FileWriter(outFile2));
+			    for(int i =0; i < sArray.length; i++) {
+			    	bw2.write(sArray[i]);
+			    	bw2.write('\n');
+			    }
+			    bw2.close();
+			    System.out.println("Successfully written sorted SimpleList output to file! \n");
+			    System.out.println("ACCURACY CHECKING:");
+			    System.out.println("Do both methods result in the same output? " + checkAccuracy(array, sArray));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	public static SimpleList generateSimpleList() {
+		SimpleList list = new SimpleList();
+		String line;
+		String[] words;
+		String word;
+		try {
+			BufferedReader input = new BufferedReader(new FileReader(file));
+			while ((line = input.readLine())!= null) {
+				words = line.split(" ");
+				for (int i = 0; i < words.length; i++) {
+					simpleListCount++;
+					word = words[i];
+					word = word.toLowerCase();
+					if (word.equals("")==false) {
+						Entry entry = new Entry(word);
+						int count = list.find(word);
+						if (count != -1) {
+							list.getEntry(count).incrementCount();
+						} else {
+							list.add(entry);
+						}
+					}
+				}
+			}
+			input.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public static HashTable generateHashTable() {
+		HashTable list = new HashTable();
+		String line;
+		String[] words;
+		String word;
+		try {
+			BufferedReader input = new BufferedReader(new FileReader(file));
+			while ((line = input.readLine())!= null) {
+				words = line.split(" ");
+				for (int i = 0; i < words.length; i++) {
+					hashTableCount++;
+					word = words[i];
+					word.trim();
+					word = word.toLowerCase();
+					if (word.equals("")==false) {
+						Entry entry = new Entry(word);
+						list.add(entry);	
+					}
+					
+				}
+			}
+			input.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public static boolean checkAccuracy(String[] arr1, String[] arr2) {
+		if (arr1.length != arr2.length) {
+			return false;
+		}
+		for (int i = 0; i < arr1.length; i++) {
+			if (arr1[i].equals(arr2[i])==false) {
+				return false;
+			}
+		}
+		return true;
+		
+	}
+	
+	
+	
+	private static void configureFileChooser(final FileChooser fileChooser){                           
+        fileChooser.setTitle("Select Input File");
+        fileChooser.setInitialDirectory(
+            new File(System.getProperty("user.home"))
+        ); 
+        
+    	FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT Files (*.txt)", "*.txt");
+     fileChooser.getExtensionFilters().add(extFilter);
+    }
+}

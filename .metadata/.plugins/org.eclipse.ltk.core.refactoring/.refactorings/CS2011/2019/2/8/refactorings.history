@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;computeBMI.java&apos; to &apos;CS2011/src/chapter2&apos;&#x0A;- Original project: &apos;CS2011&apos;&#x0A;- Destination element: &apos;CS2011/src/chapter2&apos;&#x0A;- Original element: &apos;chapter3.computeBMI.java&apos;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src&lt;chapter2" element1="/src&lt;chapter3{computeBMI.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" patterns="*" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1550788112857" units="1" version="1.0"/>
+</session>

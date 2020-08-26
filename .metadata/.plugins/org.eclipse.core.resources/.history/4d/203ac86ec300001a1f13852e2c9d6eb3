@@ -1,0 +1,6 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+* {
+	-fx-background-color: rgb(255,252,51);
+	-fx-background-image: url("https://imgflip.com/s/meme/Expanding-Brain.jpg");
+}

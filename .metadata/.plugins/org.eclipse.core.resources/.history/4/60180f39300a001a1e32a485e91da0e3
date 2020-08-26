@@ -1,0 +1,84 @@
+package application;
+	
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.control.ToolBar;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ScrollPane;
+
+
+public class Main extends Application {
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			BorderPane root = new BorderPane();
+			TextField loanAmt = new TextField();
+			TextField numYears = new TextField();
+			Button calc = new Button("Show Table");
+			ToolBar input = new ToolBar(
+					new Label("Loan Amount"),
+					loanAmt,
+					new Separator(),
+					new Label("Number of Years"),
+					numYears,
+					new Separator(),
+					calc
+					);
+			TextArea tableTA = new TextArea();
+			ScrollPane table = new ScrollPane(tableTA);
+			calc.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("Interest Rate  Monthly Payment  Total Payment\n");
+					double rate = 5.0;
+					double amount = Double.parseDouble(loanAmt.getText());
+					int years = Integer.parseInt(numYears.getText());
+					for (int i = 0; i< 24; i++, rate+=0.125) {
+						double monthlyPayment = getMonthlyPayment(amount, rate, years);
+						double totalPayment = getTotalPayment(monthlyPayment, years);
+						sb.append(String.format("%-13.3f    %-15.2f    %-13.2f\n ",rate, monthlyPayment, totalPayment));
+					}
+					tableTA.setText(sb.toString());
+				}
+				
+			});
+			table.setPadding(new Insets(15,15,15,15));
+			table.setMaxWidth(600);
+			root.setTop(input);
+			root.setCenter(table);
+			Scene scene = new Scene(root,675,400);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static double getMonthlyPayment(double amount, double rate, int years) {
+		double monthlyPayment = 0;
+		double coeff = (rate * Math.pow((1+rate), years * 12))/(Math.pow((1+rate), years * 12)-1);
+		monthlyPayment = amount * coeff;
+		return monthlyPayment;
+	}
+	
+	public static double getTotalPayment(double monthlyPayment, int years) {
+		return monthlyPayment*years*12;
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+}

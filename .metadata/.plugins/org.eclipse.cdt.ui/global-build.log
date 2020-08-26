@@ -1,0 +1,11 @@
+14:25:29 **** Build of configuration Debug for project Basics ****
+make all 
+Building file: ../src/Basics.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Basics.d" -MT"src/Basics.o" -o "src/Basics.o" "../src/Basics.cpp"
+../src/Basics.cpp:14:11: error: use of undeclared identifier 's'
+        return 0;s
+                 ^
+1 error generated.
+make: *** [src/Basics.o] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.

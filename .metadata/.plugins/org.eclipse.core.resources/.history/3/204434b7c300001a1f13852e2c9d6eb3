@@ -1,0 +1,7 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+	-fx-background-color: rgb(255,252,51);
+	-fx-background-image: url("meme.jpg");
+	-fx-background-repeat: stretch
+}

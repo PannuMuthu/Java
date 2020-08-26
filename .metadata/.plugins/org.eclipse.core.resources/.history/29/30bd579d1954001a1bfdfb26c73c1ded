@@ -1,0 +1,28 @@
+package ch20;
+
+public class DynamicList<E extends Comparable<E>> {
+	private E[] elements;
+	private final static int CAPACITY = 10;
+	
+	public DynamicList() {
+		this.elements = (E[]) new Object[DynamicList.CAPACITY];
+	}
+	
+	public DynamicList(int capacity) { 
+		this.elements = (E[]) new Object[capacity];
+	}
+	
+	public int size() { 
+		int count = 0;
+		
+		for (int i = 0; i < this.elements.length; i++) {
+			if(this.elements[i] == null) {
+				break;
+			}
+			else {
+				count+=1;
+			}
+		}
+		return count;
+	}
+}

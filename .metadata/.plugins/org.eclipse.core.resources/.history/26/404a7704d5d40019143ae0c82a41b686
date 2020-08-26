@@ -1,0 +1,29 @@
+package hw2;
+import java.util.Scanner;
+
+public class AttackDriver {
+	public static void main (String[] args) {
+		Scanner input = new Scanner(System.in);
+		int response;
+		System.out.println("This program will allow you to report and get information about monster attacks.");
+		do {
+			System.out.println("What would you like to do? Enter 1 to report monster attacks, 2 to show attacks, 3 to show damages, 4 to show monsters, 5 to find earliest attack. Press 0 to exit.");
+			response = input.nextInt();
+			if (response > 6 && response < 0) {
+				System.out.println("Invalid input. Try again.");
+			} else if (response < 6 && response > 1 && AttackMonitor.attacks.length == 0) {
+				System.out.println("There doesn't seem to be any monster attacks. Try reporting an attack first.");
+			}
+			else {
+				switch(response) {
+					case 1:  AttackMonitor.reportAttacks();
+					case 2:	 AttackMonitor.showAttack();
+					case 3: 
+					case 4:
+					case 5: 
+				}
+			}
+		} while(response == 0);
+		
+	}
+}
